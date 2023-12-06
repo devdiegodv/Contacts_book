@@ -27,7 +27,7 @@ class User(Base):
     email: str
     password: str
 
-    __tablename__ = 'user'
+    __tablename__ = 'user_app'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
@@ -92,14 +92,14 @@ class BelongsTo(Base):
 
     Attributes:
     - id (int): BelongsTo's unique identifier.
-    - user_id (int): User's unique identifier.
+    - user_app_id (int): User's unique identifier.
     - contact_id (int): Contact's unique identifier.
     """
     id: int
-    user_id: int
+    user_app_id: int
     contact_id: int
 
     __tablename__ = 'belongsto'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, nullable=False)
+    user_app_id = Column(Integer, nullable=False)
     contact_id = Column(Integer, nullable=False)
