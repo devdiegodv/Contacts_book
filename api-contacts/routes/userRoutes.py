@@ -10,8 +10,11 @@ def user():
         session = connect()
         users = session.query(User).all()
         print(users)
-    except:
+    except Exception as e:
         print('The user could not connect to the database')
+        print(e)
     finally:
         session.close()
+    
+    return 'Query done'
         
