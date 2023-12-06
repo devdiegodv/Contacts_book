@@ -1,11 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URI = 'postgresql://postgres:pass@localhost:5432/agenda'
+DATABASE_URI = 'postgresql://postgres:admin@localhost:5432/contacts_db'
 
 def connect():
     engine = create_engine(DATABASE_URI)
-    Session = sessionmaker(bin=engine)
+    Session = sessionmaker(bind=engine)
 
     s = Session()
 
