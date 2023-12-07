@@ -30,3 +30,23 @@ def selectContacts(user_id, field, order):
         session.close()
 
     return contacts
+
+def selectContact(contact_id):
+    """
+    Retrieve a specific contact based on the provided contact ID.
+
+    Parameters:
+    - contact_id (int): The unique identifier of the contact to be retrieved.
+
+    Returns:
+    - contact (Contact): The contact information if found, or None if the contact is not found.
+    """
+    try:
+        session = connect()
+        contact = session.query(Contact).filter(Contact.id == contact_id).all()[0]
+    except Exception as e:
+        print(e)
+    finally:
+        session.close()
+
+    return contact
