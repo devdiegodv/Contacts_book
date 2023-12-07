@@ -1,5 +1,5 @@
 from db import connect
-from models import Contact, BelongsTo
+from models import Contact, BelongsTo, User
 
 def selectContacts(user_id, field, order):
     """
@@ -51,7 +51,7 @@ def selectContact(contact_id):
 
     return contact
 
-def search_contacts(user_id, value):
+def searchContacts(user_id, value):
     """
     Search for contacts associated with a specific user based on a provided search value.
 
@@ -81,3 +81,55 @@ def search_contacts(user_id, value):
         session.close()
     
     return contacts
+
+def insertContact(user_id, name, last_name, address, email, phone_number):
+    """
+    Insert a new contact associated with a specific user into the database.
+
+    Parameters:
+    - user_id (int): The unique identifier of the user to whom the contact belongs.
+    - name (str): The name of the contact.
+    - last_name (str): The last name of the contact.
+    - address (str): The address of the contact.
+    - email (str): The email address of the contact.
+    - phone_number (str): The phone number of the contact.
+
+    Returns:
+    - True if the contact insertion is successful, False otherwise.
+    """
+    try:
+        session = connect()
+
+        user_exists = session.query(User).filter(User.id == user_id).first()
+
+        if user_exists:
+            contact = Contact(
+                name=name,
+                last_name=last_name,
+                address=address,
+                email=email,
+                phone_number=phone_number
+            )
+            session.add(contact)
+            session.commit()
+
+            session.refresh(contact)
+            contact_id = contact.id
+
+            belongsto = BelongsTo(
+                user_app_id=user_id,
+                contact_id=contact_id
+            )
+            session.add(belongsto)
+            session.commit()
+
+        else:
+            print(f"User with id {user_id} does not exist.")
+            return False
+
+    except Exception as e:
+        print(e)
+    finally:
+        session.close()
+
+    return True
