@@ -95,3 +95,43 @@ def getContactStr():
     contacts = contactController.search_contacts(user_id, value)
 
     return jsonify(contacts)
+
+@contact_api.route('/contactInsert', methods = ['GET', 'POST'])
+def insertContact():
+    """
+    Endpoint to insert a new contact into the system.
+
+    Method:
+    - GET: Retrieves information from the request parameters.
+    - POST: Accepts information in the request body.
+
+    Parameters (for both methods):
+    - user_id (str): Identifier for the user associated with the contact.
+    - name (str): First name of the contact.
+    - last_name (str): Last name of the contact.
+    - address (str): Address information of the contact.
+    - email (str): Email address of the contact.
+    - phone_number (str): Phone number of the contact.
+
+    Returns:
+    - JSON response indicating the result of the insertion.
+
+    Example Usage:
+    - GET: /contactInsert?user_id=123&name=John&last_name=Doe&address=123 Main St&email=john.doe@example.com&phone_number=555-1234
+
+    Example Response:
+    {
+        "result": "True"
+    }
+    """
+    parameters = request.args
+    user_id = parameters['user_id']
+    name = parameters['name']
+    last_name = parameters['last_name']
+    address = parameters['address']
+    email = parameters['email']
+    phone_number = parameters['phone_number']
+
+    result = contactController.insertContact(user_id, name, last_name, address, email, phone_number)
+
+    return jsonify({'result': result})
