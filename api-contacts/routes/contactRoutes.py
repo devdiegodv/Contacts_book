@@ -20,7 +20,7 @@ def getContacts():
     - JSON response containing the list of contacts based on the specified parameters.
 
     Example Usage:
-    - GET /getContacts?user_id=1&field=ID&order=ASC
+    - GET /Contacts?user_id=1&field=ID&order=ASC
 
     Example Response:
     - [{'id': 1, 'name': 'John Doe', 'email': 'john@example.com'}, ...]
@@ -35,3 +35,32 @@ def getContacts():
     contacts = contactController.selectContacts(user_id, field, order)
 
     return jsonify(contacts)
+
+@contact_api.route('/contact', methods = ['GET'])
+def getContact():
+    """
+    Endpoint to retrieve a specific contact based on the provided contact ID.
+
+    HTTP Method:
+    - GET
+
+    Request Parameters:
+    - contact_id (int): The unique identifier of the contact to be retrieved.
+
+    Returns:
+    - JSON response containing the contact information if found, or an empty JSON object if the contact is not found.
+
+    Example Usage:
+    - GET /Contact?contact_id=1
+
+    Example Response:
+    - {'id': 1, 'name': 'John Doe', 'email': 'john@example.com'}
+
+    Note:
+    - The actual response structure may vary based on the implementation of contactController.selectContact.
+    """
+    parameters = request.args
+    contact_id = parameters['contact_id']
+    contact = contactController.selectContact(contact_id)
+
+    return jsonify(contact)
