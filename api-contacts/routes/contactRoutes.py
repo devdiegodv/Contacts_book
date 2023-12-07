@@ -64,3 +64,34 @@ def getContact():
     contact = contactController.selectContact(contact_id)
 
     return jsonify(contact)
+
+@contact_api.route('/contactStr', methods = ['GET'])
+def getContactStr():
+    """
+    Endpoint to search for contacts based on a provided search value and user ID.
+
+    HTTP Method:
+    - GET
+
+    Request Parameters:
+    - user_id (int): The unique identifier of the user for whom contacts are searched.
+    - value (str): The search value to be matched against contact names, last names, addresses, and emails.
+
+    Returns:
+    - JSON response containing a list of contacts that match the search criteria.
+
+    Example Usage:
+    - GET /contactStr?user_id=1&value=John
+
+    Example Response:
+    - [{'id': 1, 'name': 'John Doe', 'last_name': 'Smith', 'address': '123 Main St', 'email': 'john@example.com'}, ...]
+
+    Note:
+    - The actual response structure may vary based on the implementation of contactController.search_contacts.
+    """
+    parameters = request.args
+    user_id = parameters['user_id']
+    value = parameters['value']
+    contacts = contactController.search_contacts(user_id, value)
+
+    return jsonify(contacts)
