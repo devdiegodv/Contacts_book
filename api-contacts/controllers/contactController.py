@@ -50,3 +50,34 @@ def selectContact(contact_id):
         session.close()
 
     return contact
+
+def search_contacts(user_id, value):
+    """
+    Search for contacts associated with a specific user based on a provided search value.
+
+    Parameters:
+    - user_id (int): The unique identifier of the user for whom contacts are searched.
+    - value (str): The search value to be matched against contact names, last names, addresses, and emails.
+
+    Returns:
+    - contacts (list): A list of Contact objects that match the search criteria.
+
+    Note:
+    - The search is case-insensitive and looks for partial matches in the name, last name, address, and email fields.
+    - The results are ordered by contact name.
+
+    Example Usage:
+    - search_contacts(user_id=1, value='John')
+
+    Example Response:
+    - [{'id': 1, 'name': 'John Doe', 'last_name': 'Smith', 'address': '123 Main St', 'email': 'john@example.com'}, ...]
+    """
+    try:
+        session = connect()
+        contacts = session.query(Contact).join(BelongsTo, Contact.id == BelongsTo.contact_id).filter(BelongsTo.user_app_id == user_id).filter((Contact.name.ilike('%' + value + '%')) | (Contact.last_name.ilike('%'+ value + '%')) | (Contact.address.ilike('%' + value + '%') | (Contact.email.ilike('%' + value + '%')))).order_by(Contact.name).all()
+    except Exception as e:
+        print(e)
+    finally:
+        session.close()
+    
+    return contacts
