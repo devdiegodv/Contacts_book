@@ -67,7 +67,7 @@ def searchContacts(user_id, value):
     - The results are ordered by contact name.
 
     Example Usage:
-    - search_contacts(user_id=1, value='John')
+    - searchContacts(user_id=1, value='John')
 
     Example Response:
     - [{'id': 1, 'name': 'John Doe', 'last_name': 'Smith', 'address': '123 Main St', 'email': 'john@example.com'}, ...]
@@ -133,3 +133,70 @@ def insertContact(user_id, name, last_name, address, email, phone_number):
         session.close()
 
     return True
+
+def updateContacts(id, name, last_name, address, email, phone_number):
+    """
+    Updates an existing contact into the database.
+
+    Parameters:
+    - id (int): The unique identifier of the user to whom the contact belongs.
+    - name (str): The name of the contact.
+    - last_name (str): The last name of the contact.
+    - address (str): The address of the contact.
+    - email (str): The email address of the contact.
+    - phone_number (str): The phone number of the contact.
+
+    Returns:
+    - True if the contact update is successful, False otherwise.
+    """
+    try:
+        session = connect()
+        user_exists = session.query(User).filter(User.id == id).first()
+        if user_exists:
+            contact = session.query(Contact).get(id)
+            contact.name = name
+            contact.last_name = last_name
+            contact.address = address
+            contact.email = email
+            contact.phone_number = phone_number
+
+            session.add(contact)
+            session.commit()
+        else:
+            print(f"User with id {id} does not exist.")
+            return False
+    except Exception as e:
+        print(e)
+        return False
+    finally:
+        session.close()
+        
+    return True
+
+def deleteContact(user_id, contact_id):
+    """
+    Deletes an existing contact into the database.
+
+    Parameters:
+    - user_id (int): The unique identifier of the user to whom the contact belongs.
+    - contact_id (int): The unique identifier of the contact to be retrieved.
+
+    Returns:
+    - Null if the contact delete is successful, False otherwise.
+    """
+    try:
+        session = connect()
+        user_exists = session.query(User).filter(User.id == user_id).first()
+        if user_exists:
+            session.query(BelongsTo).filter(BelongsTo.contact_id == contact_id).filter(BelongsTo.user_app_id == user_id).delete()
+            contact = session.query(Contact).get(contact_id) # or .filter(Contact.id == contact_id)
+            session.delete(contact)
+            session.commit()
+        else:
+            print(f"User with id {user_id} does not exist.")
+            return False
+    except Exception as e:
+        print(e)
+        return False
+    finally:
+        session.close()
