@@ -92,11 +92,11 @@ def getContactStr():
     parameters = request.args
     user_id = parameters['user_id']
     value = parameters['value']
-    contacts = contactController.search_contacts(user_id, value)
+    contacts = contactController.searchContacts(user_id, value)
 
     return jsonify(contacts)
 
-@contact_api.route('/contactInsert', methods = ['GET', 'POST'])
+@contact_api.route('/insertContact', methods = ['GET', 'POST'])
 def insertContact():
     """
     Endpoint to insert a new contact into the system.
@@ -117,7 +117,7 @@ def insertContact():
     - JSON response indicating the result of the insertion.
 
     Example Usage:
-    - GET: /contactInsert?user_id=123&name=John&last_name=Doe&address=123 Main St&email=john.doe@example.com&phone_number=555-1234
+    - GET: /insertContact?user_id=123&name=John&last_name=Doe&address=123 Main St&email=john.doe@example.com&phone_number=555-1234
 
     Example Response:
     {
@@ -133,5 +133,73 @@ def insertContact():
     phone_number = parameters['phone_number']
 
     result = contactController.insertContact(user_id, name, last_name, address, email, phone_number)
+
+    return jsonify({'result': result})
+
+@contact_api.route('/updateContact', methods = ['GET', 'POST'])
+def updateContact():
+    """
+    Endpoint for updating a contact's information.
+
+    Method: GET and POST
+
+    Parameters (via request.args):
+    - id (str): Identifier for the user associated with the contact.
+    - name (str): First name of the contact.
+    - last_name (str): Last name of the contact.
+    - address (str): Address information of the contact.
+    - email (str): Email address of the contact.
+    - phone_number (str): Phone number of the contact.
+
+    Returns:
+    - JSON response indicating the result of the insertion.
+
+    Example Usage:
+    - GET: /updateContact?id=4&name=Yoel&last_name=Joarez&address=123%20Main%20St&email=john.doe@example.com&phone_number=555-1234
+
+    Example Response:
+    {
+        "result": "True"
+    }
+    """
+    parameters = request.args
+    id = parameters['id']
+    name = parameters['name']
+    last_name = parameters['last_name']
+    address = parameters['address']
+    email = parameters['email']
+    phone_number = parameters['phone_number']
+
+    result = contactController.updateContacts(id, name, last_name, address, email, phone_number)
+
+    return jsonify({'result': result})
+
+@contact_api.route('/deleteContact', methods = ['GET', 'POST'])
+def deleteContact():
+    """
+    Endpoint for deleting a contact's information.
+
+    Method: GET and POST
+
+    Parameters (via request.args):
+    - user_id (str): Identifier for the user associated with the contact.
+    - contact_id (int): The unique identifier of the contact to be retrieved.
+
+    Returns:
+    - JSON response indicating the result of the insertion.
+
+    Example Usage:
+    - GET: /deleteContact?user_id=3&contact_id=46
+
+    Example Response:
+    {
+        "result": "null"
+    }
+    """
+    parameters = request.args
+    user_id = parameters['user_id']
+    contact_id = parameters['contact_id']
+
+    result = contactController.deleteContact(user_id, contact_id)
 
     return jsonify({'result': result})
