@@ -10,10 +10,15 @@ function send(){
     .then(res => res.json())
     .then(res =>{
         if (res.result != 0){
-            location.href = "main.html"
+            localStorage.setItem("id", res.result);
+            location.href = "main.html";
         }
         else{
-            alert("User data is invalid")
+            Swal.fire(
+                'Login',
+                'Credentials are invalid',
+                'error'
+            )
         }
     });
 }
