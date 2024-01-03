@@ -36,7 +36,7 @@ def getContacts():
 
     return jsonify(contacts)
 
-@contact_api.route('/contact', methods = ['GET'])
+@contact_api.route('/contact', methods = ['GET', 'DELETE'])
 def getContact():
     """
     Endpoint to retrieve a specific contact based on the provided contact ID.

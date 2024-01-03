@@ -46,7 +46,7 @@ function load_data_table(res){
         col8.innerHTML = '<button style="cursor: pointer"><i class="fa fa-pen"></i></button>'
 
         let col9 = document.createElement("td")
-        col9.innerHTML = '<button style="cursor: pointer"><i class="fa fa-trash"></i></button>'
+        col9.innerHTML = '<button onclick="delete_contact('+res[i].id+')" style="cursor: pointer"><i class="fa fa-trash"></i></button>'
 
         table.appendChild(tr)
         tr.appendChild(col1)
@@ -59,4 +59,40 @@ function load_data_table(res){
         tr.appendChild(col8)
         tr.appendChild(col9)
     }   
+}
+
+function delete_contact(id){
+    Swal.fire({
+        title: 'The contact will be deleted, do you want to continue?',
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+    }). then((result) => {
+        if (result.isConfirmed){
+            delete_id(id);
+        }
+    })
+}
+
+function delete_id(contact_id) {
+    let user_id = localStorage.getItem("id");
+    let url = "http://127.0.0.1:5000/contact?user_id=" + user_id + "&contact_id=" + contact_id;
+
+    fetch(url, {
+        method: 'DELETE',
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.result != false) {
+            swal.fire("Delete", "Contact has been deleted successfully", "success")
+            .then(() => {
+                location.reload();
+            });
+        } else {
+            swal.fire("Delete", "Error, the contact can't be deleted", "error");
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting contact:', error);
+        swal.fire("Error", "An error occurred while deleting the contact", "error");
+    });
 }
