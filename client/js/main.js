@@ -1,10 +1,24 @@
+/**
+ * This function is executed when the window has finished loading. It initializes the table with contacts,
+ * sets up click event listeners for sorting by name and searching contacts by name.
+ */
 window.onload = function(){
     loadTable("ID", "ASC")
 
+    // Setting up the click event listener for sorting by name
     let order_name = document.getElementById("order_name")
     order_name.addEventListener("click", order_contacts_name);
+
+    // Setting up the input event listener for searching contacts
+    let search = document.getElementById("search");
+    search.addEventListener("input", search_contact);
 }
 
+/**
+ * Loads the contact table based on the specified field and order.
+ * @param {string} field - The field by which to sort the contacts (e.g., "ID", "NAME").
+ * @param {string} order - The order of sorting ("ASC" for ascending, "DESC" for descending).
+ */
 function loadTable(field, order){
     let id = localStorage.getItem("id")
     let url = "http://127.0.0.1:5000/contacts?user_id="+id+"&field="+field+"&order="+order;
@@ -18,12 +32,17 @@ function loadTable(field, order){
     })
 }
 
+/**
+ * Populates the HTML table with contact data.
+ * @param {Object[]} res - An array of contact objects retrieved from the server.
+ */
 function load_data_table(res){
     let table = document.getElementById("body-table")
     table.innerHTML = "";
 
     for (let i=0; i<res.length; i++){
         let tr = document.createElement("tr")
+        // Creating table cells for each contact property
         let col1 = document.createElement("td")
         col1.innerHTML = res[i].id;
 
@@ -51,6 +70,7 @@ function load_data_table(res){
         let col9 = document.createElement("td")
         col9.innerHTML = '<button onclick="delete_contact('+res[i].id+')" style="cursor: pointer"><i class="fa fa-trash"></i></button>'
 
+        // Appending cells to the table row
         table.appendChild(tr)
         tr.appendChild(col1)
         tr.appendChild(col2)
@@ -64,6 +84,10 @@ function load_data_table(res){
     }   
 }
 
+/**
+ * Initiates the contact deletion process by displaying a confirmation dialog.
+ * @param {number} id - The ID of the contact to be deleted.
+ */
 function delete_contact(id){
     Swal.fire({
         title: 'The contact will be deleted, do you want to continue?',
@@ -76,6 +100,10 @@ function delete_contact(id){
     })
 }
 
+/**
+ * Sends a request to the server to delete the specified contact.
+ * @param {number} contact_id - The ID of the contact to be deleted.
+ */
 function delete_id(contact_id) {
     let user_id = localStorage.getItem("id");
     let url = "http://127.0.0.1:5000/deleteContact?user_id=" + user_id + "&contact_id=" + contact_id;
@@ -100,6 +128,9 @@ function delete_id(contact_id) {
     });
 }
 
+/**
+ * Handles the sorting of contacts by name in ascending or descending order.
+ */
 function order_contacts_name(){
     let order_name = document.getElementById("order_name")
 
@@ -119,4 +150,22 @@ function order_contacts_name(){
         order_name.classList.remove("fa-sort-up")
         order_name.classList.add("fa-sort");
     }
+}
+
+/**
+ * Handles searching contacts based on the entered value.
+ */
+function search_contact(){
+    let id = localStorage.getItem("id");
+    let value = document.getElementById("search").value;
+
+    let url = "http://127.0.0.1:5000/contactStr?user_id="+id+"&value="+value;
+
+    fetch(url, {
+        method: 'GET',
+    })
+    .then(res => res.json())
+    .then(res => {
+        load_data_table(res);
+    })
 }
