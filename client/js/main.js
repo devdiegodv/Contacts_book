@@ -65,7 +65,7 @@ function load_data_table(res){
         col7.innerHTML = res[i].creation_date
 
         let col8 = document.createElement("td")
-        col8.innerHTML = '<button style="cursor: pointer"><i class="fa fa-pen"></i></button>'
+        col8.innerHTML = '<button onclick="edit_contact('+res[i].id+')" style="cursor: pointer"><i class="fa fa-pen"></i></button>'
 
         let col9 = document.createElement("td")
         col9.innerHTML = '<button onclick="delete_contact('+res[i].id+')" style="cursor: pointer"><i class="fa fa-trash"></i></button>'
@@ -168,4 +168,15 @@ function search_contact(){
     .then(res => {
         load_data_table(res);
     })
+}
+
+function create_contact(){
+    sessionStorage.setItem("op", "new");
+    location.href = "profile.html";
+}
+
+function edit_contact(){
+    sessionStorage.setItem("op", "edit");
+    sessionStorage.setItem("contact_id", id);
+    location.href = "profile.html";
 }
