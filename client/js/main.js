@@ -1,5 +1,8 @@
 window.onload = function(){
     loadTable("ID", "ASC")
+
+    let order_name = document.getElementById("order_name")
+    order_name.addEventListener("click", order_contacts_name);
 }
 
 function loadTable(field, order){
@@ -95,4 +98,25 @@ function delete_id(contact_id) {
         console.error('Error deleting contact:', error);
         swal.fire("Error", "An error occurred while deleting the contact", "error");
     });
+}
+
+function order_contacts_name(){
+    let order_name = document.getElementById("order_name")
+
+    if (order_name.classList.contains("fa-sort")){
+        loadTable("NAME", "ASC");
+        order_name.classList.remove("fa-sort");
+        order_name.classList.add("fa-sort-down");
+    }
+    else if(order_name.classList.contains("fa-sort-down")){
+        loadTable("NAME", "DESC");
+        order_name.classList.remove("fa-sort-down");
+        order_name.classList.add("fa-sort-up");
+    }
+    else if(order_name.classList.contains("fa-sort-up")){
+        console.log("test")
+        loadTable("ID", "ASC");
+        order_name.classList.remove("fa-sort-up")
+        order_name.classList.add("fa-sort");
+    }
 }
