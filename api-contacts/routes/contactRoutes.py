@@ -36,7 +36,7 @@ def getContacts():
 
     return jsonify(contacts)
 
-@contact_api.route('/contact', methods = ['GET', 'DELETE'])
+@contact_api.route('/contact', methods = ['GET'])
 def getContact():
     """
     Endpoint to retrieve a specific contact based on the provided contact ID.
@@ -174,12 +174,12 @@ def updateContact():
 
     return jsonify({'result': result})
 
-@contact_api.route('/deleteContact', methods = ['GET', 'POST'])
+@contact_api.route('/deleteContact', methods = ['DELETE'])
 def deleteContact():
     """
     Endpoint for deleting a contact's information.
 
-    Method: GET and POST
+    Method: DELETE
 
     Parameters (via request.args):
     - user_id (str): Identifier for the user associated with the contact.

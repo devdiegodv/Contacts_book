@@ -75,7 +75,7 @@ function delete_contact(id){
 
 function delete_id(contact_id) {
     let user_id = localStorage.getItem("id");
-    let url = "http://127.0.0.1:5000/contact?user_id=" + user_id + "&contact_id=" + contact_id;
+    let url = "http://127.0.0.1:5000/deleteContact?user_id=" + user_id + "&contact_id=" + contact_id;
 
     fetch(url, {
         method: 'DELETE',
