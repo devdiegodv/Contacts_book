@@ -170,12 +170,22 @@ function search_contact(){
     })
 }
 
+/**
+ * create_contact - Function to set the operation as "new" in sessionStorage
+ * and navigate to the profile.html page for creating a new contact.
+ */
 function create_contact(){
     sessionStorage.setItem("op", "new");
     location.href = "profile.html";
 }
 
-function edit_contact(){
+/**
+ * edit_contact - Function to set the operation as "edit" and store the contact_id
+ * in sessionStorage, then navigate to the profile.html page for editing a contact.
+ *
+ * @param {string} id - The unique identifier of the contact to be edited.
+ */
+function edit_contact(id){
     sessionStorage.setItem("op", "edit");
     sessionStorage.setItem("contact_id", id);
     location.href = "profile.html";
