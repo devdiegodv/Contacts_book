@@ -43,7 +43,13 @@ def selectContact(contact_id):
     """
     try:
         session = connect()
-        contact = session.query(Contact).filter(Contact.id == contact_id).all()[0]
+        user_exists = session.query(Contact).filter(Contact.id == contact_id).first()
+        if user_exists:
+            contact = session.query(Contact).filter(Contact.id == contact_id).all()[0]
+        else:
+            print(f"Contact with id {contact_id} does not exist.")
+            return False
+        
     except Exception as e:
         print(e)
     finally:
@@ -74,6 +80,7 @@ def searchContacts(user_id, value):
     """
     try:
         session = connect()
+        
         contacts = session.query(Contact).join(BelongsTo, Contact.id == BelongsTo.contact_id).filter(BelongsTo.user_app_id == user_id).filter((Contact.name.ilike('%' + value + '%')) | (Contact.last_name.ilike('%'+ value + '%')) | (Contact.address.ilike('%' + value + '%') | (Contact.email.ilike('%' + value + '%')))).order_by(Contact.name).all()
     except Exception as e:
         print(e)
@@ -151,20 +158,15 @@ def updateContacts(id, name, last_name, address, email, phone_number):
     """
     try:
         session = connect()
-        user_exists = session.query(User).filter(User.id == id).first()
-        if user_exists:
-            contact = session.query(Contact).get(id)
-            contact.name = name
-            contact.last_name = last_name
-            contact.address = address
-            contact.email = email
-            contact.phone_number = phone_number
+        contact = session.query(Contact).get(id)
+        contact.name = name
+        contact.last_name = last_name
+        contact.address = address
+        contact.email = email
+        contact.phone_number = phone_number
 
-            session.add(contact)
-            session.commit()
-        else:
-            print(f"User with id {id} does not exist.")
-            return False
+        session.add(contact)
+        session.commit()
     except Exception as e:
         print(e)
         return False
