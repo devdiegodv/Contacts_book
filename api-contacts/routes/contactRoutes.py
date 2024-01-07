@@ -96,7 +96,7 @@ def getContactStr():
 
     return jsonify(contacts)
 
-@contact_api.route('/insertContact', methods = ['GET', 'POST'])
+@contact_api.route('/insertContact', methods = ['POST'])
 def insertContact():
     """
     Endpoint to insert a new contact into the system.
