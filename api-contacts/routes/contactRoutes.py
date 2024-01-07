@@ -51,7 +51,7 @@ def getContact():
     - JSON response containing the contact information if found, or an empty JSON object if the contact is not found.
 
     Example Usage:
-    - GET /Contact?contact_id=1
+    - GET /contact?contact_id=1
 
     Example Response:
     - {'id': 1, 'name': 'John Doe', 'email': 'john@example.com'}
@@ -136,12 +136,12 @@ def insertContact():
 
     return jsonify({'result': result})
 
-@contact_api.route('/updateContact', methods = ['GET', 'POST'])
+@contact_api.route('/updateContact', methods = ['PUT', 'POST'])
 def updateContact():
     """
     Endpoint for updating a contact's information.
 
-    Method: GET and POST
+    Method: PUT
 
     Parameters (via request.args):
     - id (str): Identifier for the user associated with the contact.
