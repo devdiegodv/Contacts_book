@@ -29,3 +29,51 @@ function loadData(contact_id){
         document.getElementById("phone_number").value = res.phone_number;
     })
 }
+
+function operate(){
+    let op = sessionStorage.getItem("op");
+
+    if (op == "edit"){
+        edit_contact();
+    }
+}
+
+function edit_contact(){
+    Swal.fire({
+        title: "The contact will be edited, do you want to continue?",
+        showCancelButton: true,
+        confirmButtonText: "OK",
+    }).then((result => {
+        if(result.isConfirmed){
+            edit();
+        }
+    }))
+}
+
+function edit(){
+    let id = document.getElementById("id").value;
+    let name = document.getElementById("name").value;
+    let last_name = document.getElementById("last_name").value;
+    let address = document.getElementById("address").value;
+    let email = document.getElementById("email").value;
+    let phone_number = document.getElementById("phone_number").value;
+
+    let url = "http://127.0.0.1:5000/updateContact?id="+id+"&name="+name+"&last_name="+last_name+"&address="+address+"&email="+email+"&phone_number="+phone_number;
+
+    fetch(url, {
+        method: 'PUT'
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.result != false){
+            swal.fire("Edit", "Contact has been edited successfully", "success")
+            .then(() => {
+                sessionStorage.clear();
+                location.href = "main.html";
+            })
+        }else{
+            swal("Edit", "Error, the contact couldn't be edited", "error");
+        }
+    })
+
+}
