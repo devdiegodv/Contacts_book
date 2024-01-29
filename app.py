@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from app import app 
 from routes.userRoutes import user_api
 from routes.contactRoutes import contact_api
 
